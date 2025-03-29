@@ -21,7 +21,7 @@ func TestOptionalIntGetSet(t *testing.T) {
 	assert.False(t, opt.isEmpty)
 	assert.Equal(t, 1, opt.Get())
 }
-func TestOptionalGenericGetSetV1(t *testing.T) {
+func TestOptionalGenericGetSet(t *testing.T) {
 	opt := NewOptional[int64](2)
 	assert.False(t, opt.isEmpty)
 	v := any(opt.Get())
