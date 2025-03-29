@@ -6,43 +6,43 @@ import (
 )
 
 type Value[T any] struct {
-	value   T
-	isEmpty bool
+	Value   T
+	IsEmpty bool
 }
 
 func (o *Value[T]) Get() T {
-	return o.value
+	return o.Value
 }
 func (o *Value[T]) Set(value T) {
-	o.value = value
-	o.isEmpty = false
+	o.Value = value
+	o.IsEmpty = false
 }
 func (o *Value[T]) Empty() bool {
-	return o.isEmpty
+	return o.IsEmpty
 }
 func (o *Value[T]) OrElse(value T) T {
-	if o.isEmpty {
+	if o.IsEmpty {
 		return value
 	}
-	return o.value
+	return o.Value
 }
 func (o *Value[T]) OrElseString(value string) string {
-	if o.isEmpty {
+	if o.IsEmpty {
 		return value
 	}
-	return fmt.Sprintf("%v", o.value)
+	return fmt.Sprintf("%v", o.Value)
 }
 func (o *Value[T]) OrElseFormatted(format, value string) string {
-	if o.isEmpty {
+	if o.IsEmpty {
 		return value
 	}
 	var v interface{}
-	v = o.value
+	v = o.Value
 	switch x := v.(type) {
 	case time.Time:
 		return x.Format(format)
 	default:
-		return fmt.Sprintf(format, o.value)
+		return fmt.Sprintf(format, o.Value)
 	}
 
 }
@@ -50,47 +50,47 @@ func (o *Value[T]) OrElseFormatted(format, value string) string {
 func NewFloatOptional(value ...float64) Value[float64] {
 	if len(value) == 0 {
 		return Value[float64]{
-			value:   0,
-			isEmpty: true,
+			Value:   0,
+			IsEmpty: true,
 		}
 	}
 	return Value[float64]{
-		value:   value[0],
-		isEmpty: false,
+		Value:   value[0],
+		IsEmpty: false,
 	}
 }
 func NewIntOptional(value ...int) Value[int] {
 	if len(value) == 0 {
 		return Value[int]{
-			value:   0,
-			isEmpty: true,
+			Value:   0,
+			IsEmpty: true,
 		}
 	}
 	return Value[int]{
-		value:   value[0],
-		isEmpty: false,
+		Value:   value[0],
+		IsEmpty: false,
 	}
 }
 func NewDateOptional(value ...time.Time) Value[time.Time] {
 	if len(value) == 0 {
 		return Value[time.Time]{
-			value:   time.Time{},
-			isEmpty: true,
+			Value:   time.Time{},
+			IsEmpty: true,
 		}
 	}
 	return Value[time.Time]{
-		value:   value[0],
-		isEmpty: false,
+		Value:   value[0],
+		IsEmpty: false,
 	}
 }
 func NewOptional[T any](value ...T) Value[T] {
 	if len(value) == 0 {
 		return Value[T]{
-			isEmpty: true,
+			IsEmpty: true,
 		}
 	}
 	return Value[T]{
-		value:   value[0],
-		isEmpty: false,
+		Value:   value[0],
+		IsEmpty: false,
 	}
 }
