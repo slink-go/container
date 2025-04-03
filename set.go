@@ -59,7 +59,7 @@ func (s *Set[T]) Values() []T {
 	return values
 }
 
-func (s *Set[T]) RemoveAll(other Set[T]) *Set[T] {
+func (s *Set[T]) RemoveAll(other *Set[T]) *Set[T] {
 	result := NewSet[T]()
 	for v := range s.values {
 		if !other.Contains(v) {
@@ -68,7 +68,7 @@ func (s *Set[T]) RemoveAll(other Set[T]) *Set[T] {
 	}
 	return result
 }
-func (s *Set[T]) AddAll(other Set[T]) *Set[T] {
+func (s *Set[T]) AddAll(other *Set[T]) *Set[T] {
 	result := NewSet[T]()
 	for v := range other.values {
 		result.Add(v)
