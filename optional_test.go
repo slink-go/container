@@ -28,7 +28,7 @@ func TestOptionalGenericGetSet(t *testing.T) {
 	switch v.(type) {
 	case int64:
 	default:
-		assert.Fail(t, "Value is not int64")
+		assert.Fail(t, "Optional is not int64")
 	}
 	assert.Equal(t, int64(2), opt.Get())
 	opt.Set(1)

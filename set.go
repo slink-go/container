@@ -16,10 +16,11 @@ func NewSet[T comparable]() Set[T] {
 	return set
 }
 
-func (s *Set[T]) Add(value T) {
+func (s *Set[T]) Add(value T) *Set[T] {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 	s.values[value] = struct{}{}
+	return s
 }
 func (s *Set[T]) Remove(value T) {
 	s.mutex.Lock()
