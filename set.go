@@ -70,6 +70,9 @@ func (s *Set[T]) RemoveAll(other *Set[T]) *Set[T] {
 }
 func (s *Set[T]) AddAll(other *Set[T]) *Set[T] {
 	result := NewSet[T]()
+	for v := range s.values {
+		result.Add(v)
+	}
 	for v := range other.values {
 		result.Add(v)
 	}
