@@ -1,13 +1,27 @@
 package container
 
 import (
+	"encoding/json"
 	"fmt"
+	"go.slink.ws/types"
 	"time"
 )
 
-type Optional[T any] struct {
+type Optional[T comparable] struct {
 	Value   T
 	IsEmpty bool
+}
+
+func (o *Optional[T]) Equals(other Optional[T]) bool {
+	return o.IsEmpty && other.IsEmpty ||
+		o.Value == other.Value
+}
+
+func (o *Optional[T]) MarshalJSON() ([]byte, error) {
+	if o.IsEmpty {
+		return []byte("null"), nil
+	}
+	return json.Marshal(o.Value)
 }
 
 func (o *Optional[T]) Get() T {
@@ -40,6 +54,8 @@ func (o *Optional[T]) OrElseFormatted(format, value string) string {
 	v = o.Value
 	switch x := v.(type) {
 	case time.Time:
+		return x.Format(format)
+	case types.Date:
 		return x.Format(format)
 	default:
 		return fmt.Sprintf(format, o.Value)
@@ -83,7 +99,7 @@ func NewDateOptional(value ...time.Time) Optional[time.Time] {
 		IsEmpty: false,
 	}
 }
-func NewOptional[T any](value ...T) Optional[T] {
+func NewOptional[T comparable](value ...T) Optional[T] {
 	if len(value) == 0 {
 		return Optional[T]{
 			IsEmpty: true,
