@@ -62,6 +62,10 @@ func NewDeque[T any](opts ...DequeOption) *Deque[T] {
 	// задаём (начальный или постоянный) размер очереди
 	initialCapacity := 8
 	if qc.sizeLimit > 0 {
+		// TODO: м.б. надо это пересмотреть - сделать макс. размер в несколько раз больше
+		//       заданного настройкой, чтобы снизить количество "реаллокаций" массива
+		//       (можно это задавать отдельным конфигурационным параметром, чтобы можно было
+		//        регулировать размер потребляемой памяти vs. число реаллокаций)
 		initialCapacity = qc.sizeLimit
 	}
 
@@ -77,7 +81,7 @@ func NewDeque[T any](opts ...DequeOption) *Deque[T] {
 func (s *Deque[T]) PushHead(item T) error {
 
 	s.mutex.RLock()
-	
+
 	if s.capacity > 0 && len(s.items) >= s.capacity && !s.preemption {
 		s.mutex.RUnlock()
 		return ErrDequeueFull
