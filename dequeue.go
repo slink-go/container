@@ -76,9 +76,14 @@ func NewDeque[T any](opts ...DequeOption) *Deque[T] {
 
 func (s *Deque[T]) PushHead(item T) error {
 
+	s.mutex.RLock()
+	
 	if s.capacity > 0 && len(s.items) >= s.capacity && !s.preemption {
+		s.mutex.RUnlock()
 		return ErrDequeueFull
 	}
+
+	s.mutex.RUnlock()
 
 	s.mutex.Lock()
 
@@ -97,10 +102,15 @@ func (s *Deque[T]) PushHead(item T) error {
 }
 func (s *Deque[T]) PopHead() (T, error) {
 
+	s.mutex.RLock()
+
 	if len(s.items) == 0 {
+		s.mutex.RUnlock()
 		var empty T
 		return empty, ErrDequeueEmpty
 	}
+
+	s.mutex.RUnlock()
 
 	s.mutex.Lock()
 
@@ -114,13 +124,16 @@ func (s *Deque[T]) PopHead() (T, error) {
 }
 func (s *Deque[T]) PeekHead() (T, error) {
 
+	s.mutex.RLock()
+
 	if len(s.items) == 0 {
+		s.mutex.RUnlock()
 		var empty T
 		return empty, ErrDequeueEmpty
 	}
 
-	s.mutex.RLock()
 	item := s.items[0]
+
 	s.mutex.RUnlock()
 
 	return item, nil
@@ -129,9 +142,14 @@ func (s *Deque[T]) PeekHead() (T, error) {
 
 func (s *Deque[T]) PushTail(item T) error {
 
+	s.mutex.RLock()
+
 	if s.capacity > 0 && len(s.items) >= s.capacity && !s.preemption {
+		s.mutex.RUnlock()
 		return ErrDequeueFull
 	}
+
+	s.mutex.RUnlock()
 
 	s.mutex.Lock()
 
@@ -149,10 +167,15 @@ func (s *Deque[T]) PushTail(item T) error {
 }
 func (s *Deque[T]) PopTail() (T, error) {
 
+	s.mutex.RLock()
+
 	if len(s.items) == 0 {
+		s.mutex.RUnlock()
 		var empty T
 		return empty, ErrDequeueEmpty
 	}
+
+	s.mutex.RUnlock()
 
 	s.mutex.Lock()
 
@@ -166,12 +189,13 @@ func (s *Deque[T]) PopTail() (T, error) {
 }
 func (s *Deque[T]) PeekTail() (T, error) {
 
+	s.mutex.RLock()
+
 	if len(s.items) == 0 {
+		s.mutex.RUnlock()
 		var empty T
 		return empty, ErrDequeueEmpty
 	}
-
-	s.mutex.RLock()
 
 	item := s.items[len(s.items)-1]
 
@@ -193,7 +217,10 @@ func (s *Deque[T]) Values() []T {
 
 // Size - возвращает количество элементов в очереди
 func (s *Deque[T]) Size() int {
-	return len(s.items)
+	s.mutex.RLock()
+	sz := len(s.items)
+	s.mutex.RUnlock()
+	return sz
 }
 
 // Capacity - возвращает максимальный размер очереди; -1 для неограниченной очереди

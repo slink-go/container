@@ -3,6 +3,7 @@ package container
 import (
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"time"
 )
 
 func TestUnboundedDequeHead(t *testing.T) {
@@ -659,5 +660,32 @@ func TestBoundedPreemptionDequeBoth(t *testing.T) {
 	assert.ErrorIs(t, err, ErrDequeueEmpty)
 	assert.Equal(t, 0, d.Size())
 	assert.Equal(t, 3, d.Capacity())
+
+}
+
+func TestConcurrentAccess(t *testing.T) {
+
+	d := NewDeque[int](
+		DequeWithSizeLimit(3),
+		DequeWithPreemption(),
+	)
+
+	go func() {
+		err := d.PushTail(1)
+		assert.NoError(t, err)
+		v, err := d.PeekTail()
+		assert.NoError(t, err)
+		assert.Equal(t, 1, v)
+	}()
+
+	go func() {
+		err := d.PushHead(2)
+		assert.NoError(t, err)
+		v, err := d.PeekHead()
+		assert.NoError(t, err)
+		assert.Equal(t, 2, v)
+	}()
+
+	time.Sleep(3 * time.Second)
 
 }
