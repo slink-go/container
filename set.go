@@ -1,6 +1,8 @@
 package container
 
-import "sync"
+import (
+	"sync"
+)
 
 type Set[T comparable] struct {
 	values map[T]struct{}
