@@ -9,12 +9,13 @@ type Set[T comparable] struct {
 	mutex  sync.RWMutex
 }
 
-func NewSet[T comparable]() *Set[T] {
+func NewSet[T comparable](items ...T) *Set[T] {
 	values := make(map[T]struct{})
 	set := &Set[T]{
 		values: values,
 		mutex:  sync.RWMutex{},
 	}
+	set.Add(items...)
 	return set
 }
 
