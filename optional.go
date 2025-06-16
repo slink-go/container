@@ -3,7 +3,6 @@ package container
 import (
 	"encoding/json"
 	"fmt"
-	"go.slink.ws/types"
 	"time"
 )
 
@@ -55,7 +54,7 @@ func (o *Optional[T]) OrElseFormatted(format, value string) string {
 	switch x := v.(type) {
 	case time.Time:
 		return x.Format(format)
-	case types.Date:
+	case Date:
 		return x.Format(format)
 	default:
 		return fmt.Sprintf(format, o.Value)
