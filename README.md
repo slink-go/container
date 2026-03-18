@@ -2,3 +2,11 @@
 - optional
 - set
 - TTL map
+- ring buffer
+- queue
+    - blocking (generic)
+    - lock-free (any)
+    - lock-free (generic)
+- dequeue
+- bloom filter
+-
