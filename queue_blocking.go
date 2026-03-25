@@ -43,7 +43,15 @@ func (q *BlockingQueue[T]) Dequeue() (T, bool) {
 	}
 	q.Lock()
 	v = q.head.data
+
+	//q.head = q.head.next
+
+	var empty T
+	oldHead := q.head
 	q.head = q.head.next
+	oldHead.data = empty // Очистка данных
+	oldHead.next = nil   // Очистка ссылки
+
 	q.size--
 	q.Unlock()
 	return v, true
