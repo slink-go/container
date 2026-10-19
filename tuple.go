@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (C) 2025-2026 Mikhail Kantur
+
 package container
 
 type Tuple[T1, T2 any] struct {
